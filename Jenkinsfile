@@ -13,9 +13,19 @@ pipeline {
     }
      stage ("Checkout for SCM") {
        steps {
-         git branch : 'main' , credentialsId: 'github', url:
+         git branch : 'main' , credentialsId: 'github', url: 'https://github.com/nith-tyr/Springboot.git'
            }
      }
-      
+    stage ("Build Application") { 
+      steps {
+        sh "mvn clean package"
+      }
+    }
+    stage ("Test Application") { 
+      steps {
+        sh "mvn test"
+      }
+    }
+    
   }
 }
