@@ -57,7 +57,6 @@ pipeline {
       }
     }
 
-       stages {
     stage('Build') {
       steps {
         echo 'Building...'
@@ -78,6 +77,6 @@ pipeline {
         echo 'Deploying...'
       }
     }
-  }
-}
+     }
+
 }	  
