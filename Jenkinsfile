@@ -24,23 +24,41 @@ pipeline {
       }
     }
     
-stage("Static Code Ananlysis") {
-	steps {
-		script { 
-			withSonarQubeEnv(credentialsId: 'Sonar-Jenkins') {
-				sh "mvn sonar:sonar"
-			}
-		}
-	}
-}
-		
-		stage ("Quality Gate") {
-	steps {
-	script { 
-	waitForQualityGate abortpipeline: false, credentialsId: 'Sonar-Jenkins'
-	}
-	}
+	
+	  stage('Static Code Analysis') {
+      environment {
+        SONAR_URL = "http://54.199.15.159:9000/"
       }
+      steps {
+        withCredentials([string(credentialsId: 'Sonar-Jenkins', variable: 'SONAR_AUTH_TOKEN')]) {
+          sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN  -Dsonar.host.url=${SONAR_URL}'
+        }
+      }
+    }
+		
+//		stage ("Quality Gate") {
+//	steps {
+//	script { 
+//	waitForQualityGate abortpipeline: false, credentialsId: 'Sonar-Jenkins'
+//	}
+//	}
+//    }
+	  
+	    stage("Build & Push Docker Image") {
+            steps {
+                script {
+                    docker.withRegistry('',DOCKER_PASS) {
+                        docker_image = docker.build "${IMAGE_NAME}"
+                    }
+
+                    docker.withRegistry('',DOCKER_PASS) {
+                        docker_image.push("${IMAGE_TAG}")
+                        docker_image.push('latest')
+                    }
+                }
+            }
+
+       }
 	  
 }
 }
