@@ -5,7 +5,8 @@ pipeline {
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
     }
 }
-     stage ("Checkout for SCM") {
+     stages {
+	stage ("Checkout for SCM") {
        steps {
          git branch : 'main' , credentialsId: 'github', url: 'https://github.com/nith-tyr/Springboot.git'
            }
@@ -55,5 +56,6 @@ pipeline {
         }
       }
     }
-	  
+   
+     }	  
 }
