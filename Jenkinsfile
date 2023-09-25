@@ -41,7 +41,6 @@ stage('Static Code Analysis') {
 	waitForQualityGate abortpipeline: false, credentialsId: 'Sonar-Jenkins'
 	}
 	}
-      
-  }
+      }
 }
-
+}
