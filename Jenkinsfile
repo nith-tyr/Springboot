@@ -35,7 +35,7 @@ stage('Static Code Analysis') {
       }
     }
 
-    stage ("Qualtiy Gate") {
+    stage ("Quality Gate") {
 	steps {
 	script { 
 	waitForQualityGate abortpipeline: false, credentialsId: 'Sonar-Jenkins'
