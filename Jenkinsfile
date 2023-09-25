@@ -15,9 +15,12 @@ pipeline {
          git branch : 'main' , credentialsId: 'github', url: 'https://github.com/nith-tyr/Springboot.git'
            }
      }
-    stage ("Build Application") { 
+
+    stage('Build and Test') {
       steps {
-        sh "mvn clean package"
+        sh 'ls -ltr'
+        // build the project and create a JAR file
+        sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package'
       }
     }
     
