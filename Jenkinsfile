@@ -24,18 +24,17 @@ pipeline {
       }
     }
     
-stage('Static Code Analysis') {
-      environment {
-        SONAR_URL = "http://54.199.15.159:9000/"
-      }
-      steps {
-        withCredentials([string(credentialsId: 'Sonar-Jenkins', variable: 'SONAR_AUTH_TOKEN')]) {
-          sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN  -Dsonar.host.url=${SONAR_URL}'
-        }
-      }
-    }
-
-    stage ("Quality Gate") {
+stage("Static Code Ananlysis") {
+	steps {
+		script { 
+			withSonarQubeEnv(credentialsId: 'Sonar-Jenkins') {
+				sh "mvn sonar:sonar"
+			}
+		}
+	}
+}
+		
+		stage ("Quality Gate") {
 	steps {
 	script { 
 	waitForQualityGate abortpipeline: false, credentialsId: 'Sonar-Jenkins'
