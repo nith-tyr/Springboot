@@ -42,10 +42,6 @@ stage('Static Code Analysis') {
 	}
 	}
       }
-
-            }
-        }
-      }
-    }	  
+	  
 }
 }
