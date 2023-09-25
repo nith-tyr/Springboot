@@ -4,6 +4,14 @@ pipeline {
     jdk 'Java17'
     maven 'Maven3'
   }
+environment {
+	    APP_NAME = "Springboot"
+            RELEASE = "1.0.0"
+            DOCKER_USER = "nitheeshbp"
+            DOCKER_PASS = 'docker-login'
+            IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
+            IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+    }
   stages {
     stage("Clean Workspace") {
       steps{
