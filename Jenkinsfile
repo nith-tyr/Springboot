@@ -24,12 +24,24 @@ pipeline {
       }
     }
     
-    stage ("Test Application") { 
+stage('Static Code Analysis') {
+      environment {
+        SONAR_URL = "http://http://54.199.15.159:9000/"
+      }
       steps {
-        sh "mvn test"
+        withCredentials([string(credentialsId: 'sonarqube', variable: 'Sonar-Jenkins')]) {
+          sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$Sonar-Jenkins -Dsonar.host.url=${SONAR_URL}'
+        }
       }
     }
-    
+
+    stage ("Qualtiy Gate") {
+	steps {
+	script { 
+	waitForQualityGate abortpipeline: false, credentialsId: 'Sonar-Jenkins'
+	}
+	}
+      
   }
 }
 
