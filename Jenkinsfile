@@ -4,14 +4,6 @@ pipeline {
     jdk 'Java17'
     maven 'Maven3'
   }
-environment {
-	    APP_NAME = "Springboot"
-            RELEASE = "1.0.0"
-            DOCKER_USER = "nitheeshbp"
-            DOCKER_PASS = 'docker-login'
-            IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
-            IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
-    }
   stages {
     stage("Clean Workspace") {
       steps{
@@ -52,21 +44,22 @@ environment {
 //	}
 //    }
 	  
-	    stage("Build & Push Docker Image") {
-            steps {
-                script {
-                    docker.withRegistry('',docker-login) {
-                        docker_image = docker.build "${IMAGE_NAME}"
-                    }
-
-                    docker.withRegistry('',docker-login) {
-                        docker_image.push("${IMAGE_TAG}")
-                        docker_image.push('latest')
-                    }
-                }
+   stage('Build and Push Docker Image') {
+      environment {
+        DOCKER_IMAGE = "abhishekf5/ultimate-cicd:${BUILD_NUMBER}"
+        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
+        REGISTRY_CREDENTIALS = credentials('docker-login')
+      }
+      steps {
+        script {
+            sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
+            def dockerImage = docker.image("${DOCKER_IMAGE}")
+            docker.withRegistry('https://index.docker.io/v1/', "docker-login") {
+                dockerImage.push()
             }
-
-       }
+        }
+      }
+    }
 	  
 }
 }
