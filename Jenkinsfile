@@ -5,17 +5,6 @@ pipeline {
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
     }
 }
-	
-  tools {
-    jdk 'Java17'
-    maven 'Maven3'
-  }
-  stages {
-    stage("Clean Workspace") {
-      steps{
-        cleanWs()
-      }
-    }
      stage ("Checkout for SCM") {
        steps {
          git branch : 'main' , credentialsId: 'github', url: 'https://github.com/nith-tyr/Springboot.git'
