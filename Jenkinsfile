@@ -57,7 +57,6 @@ pipeline {
       }
     }
 
-node {
     stage('Preparation') {
         git 'https://github.com/nith-tyr/Springboot.git'
     }
@@ -73,7 +72,7 @@ node {
     stage('Results') {
         echo "Test Result"
     }
-}
+	
      }
 
 }	  
