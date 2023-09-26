@@ -56,7 +56,17 @@ pipeline {
         }
       }
     }
-snykSecurity organisation: 'nith-tyr', projectName: 'Springboot-dependency', snykInstallation: 'Snyk', snykTokenId: 'Snyk Token'
+
+ stage('Test') {
+      steps {
+        echo 'Testing...'
+        snykSecurity(
+          snykInstallation: 'Snyk',
+          snykTokenId: 'Snyk Token',
+          // place other parameters here
+        )
+      }
+    }
 
   }
 }
