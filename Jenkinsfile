@@ -57,22 +57,23 @@ pipeline {
       }
     }
 
-    stage('Preparation') {
-        git 'https://github.com/nith-tyr/Springboot.git'
+      stage('Build') {
+      steps {
+        echo 'Building...'
+      }
     }
-    stage('install'){
-        sh 'npm install' // Dependency Installation stage
+    stage('Test') {
+      steps {
+        echo 'Testing...'
+        snykSecurity(
+          snykInstallation: 'Snyk',
+          snykTokenId: '4fb943a8-e06c-4d42-9a24-bd60fd9f904e',
+          // place other optional parameters here, for example:
+          additionalArguments: '--all-projects --detection-depth=<DEPTH>'
+        )
+      }
     }
-    stage('Scan') {
-        snykSecurity organisation: 'nith-tyr', projectName: 'Springboot_snyk', severity: 'medium', snykInstallation: 'Snyk', snykTokenId: '4fb943a8-e06c-4d42-9a24-bd60fd9f904e', targetFile: 'package.json'
-    }
-    stage('Build') {
-        echo "Build"
-    }
-    stage('Results') {
-        echo "Test Result"
-    }
-	
-     }
 
-}	  
+  }
+}
+  
